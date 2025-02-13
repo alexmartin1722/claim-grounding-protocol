@@ -14,12 +14,13 @@ function SentenceViewer(props) {
     // let text = payload.Wiki_All_Text;
     let sentence = payload.Claim_Sentence
 
-    let claims = loadClaimsFromString(payload.Extracted_Claims);
+    let title = payload.Wiki_Title;
+    // let claims = loadClaimsFromString(payload.Extracted_Claims);
 
 
-    let claimList = claims.map((claim, index) => {
-        return claim.decontextualized;
-    });
+    // let claimList = claims.map((claim, index) => {
+    //     return claim.subclaim;
+    // });
     
 
 
@@ -29,24 +30,13 @@ function SentenceViewer(props) {
         // height: "100px",
         overflow: "auto"
     }}>
+        <Typography variant="h6">
+            {title}
+        </Typography>
         <Typography variant="p1">
             <b>Sentence: </b>
             {sentence}
         </Typography>
-        <br />
-        {/* <Typography variant="p1">
-            <b>Claims: </b>
-            {claimText}
-        </Typography> */}
-        {/* claimText on each line */}
-        <Typography variant="p1">
-            {/* <b>Claims: </b> */}
-            {claimList.map((claim, index) => {
-                return <div key={index}><b>Claim {index+1}: </b>{claim}</div>
-            })}
-        </Typography>
-
-
     </NormalCard>
 }
 

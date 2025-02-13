@@ -173,14 +173,14 @@ function App() {
   const [payloads, setPayloads] = useState([]);
   const [payload_index, setPayloadIndex] = useState(0);
   // Change to false for turkle
-  const [isPreview, setIsPreview] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
 
   useEffect(() => {
     // console.log("is_preview", is_preview);
     if (isPreview) {
       const fetchPayload = async () => {
         try {
-          const response = await parseCsvFromPublic("single_batch.csv");
+          const response = await parseCsvFromPublic("en_batch.csv");
           setPayloads(response);
         }
         catch (error) {

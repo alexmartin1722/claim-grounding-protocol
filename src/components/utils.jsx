@@ -97,10 +97,16 @@ function loadJsonPayload(json_string) {
 const loadClaimsFromString = (claims) => {
   // string is formatted [{'subclaim:'subclaim1', 'decontextualized':'claim1'}, ...]
   try {
+      // const rawClaims = JSON.parse(claims);
+      // return rawClaims;
+      console.log("claims", claims);
       const rawClaims = JSON.parse(claims);
-      return rawClaims;
+      console.log("rawClaims", rawClaims);
+      return JSON.parse(claims);
   } catch (e) {
       // load json manually 
+      console.log("error", e);
+      console.log("claims", claims);
       const claimPairs = claims.split("'subclaim':");
       console.log(claimPairs);
       var claimSets = [];

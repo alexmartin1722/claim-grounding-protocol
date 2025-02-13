@@ -6,27 +6,33 @@ import { Height } from "@mui/icons-material";
 
 
 
+
+
 function VideoViewer (props) {
     const {
         payload,
     } = props;
 
     let title = payload.Video_Title;
-    // let video = payload.Video_URL;
-    let video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    let video = payload.Video_Url;
+    // console.log(video);
+    // let video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
     return <NormalCard sx={{
         // margin: "0px",
         // height: "100px",
+        height: "100%",
+        width: "100%",
+        margin: "1px",
+        padding: "5px",
         overflow: "auto"
     }}>
         {/* display the video in the webpage */}
-        <Typography variant="h4">
-            {title}&nbsp;
             <video controls width="100%" height="100%">
                 <source src={video} type="video/mp4" />
             </video>
-        </Typography>
+            
+        {/* <iframe height="100%" width="100%" src={video} allow="accelerometer; autoplay; fullscreen" ></iframe> */}
     </NormalCard>
 }
 
