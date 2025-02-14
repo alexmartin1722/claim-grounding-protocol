@@ -1,12 +1,9 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import { AppBar, Toolbar } from '@mui/material';
 import Interface from './prototypes/Interface';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { lightPalette, darkPalette } from './components/themes';
@@ -173,7 +170,7 @@ function App() {
   const [payloads, setPayloads] = useState([]);
   const [payload_index, setPayloadIndex] = useState(0);
   // Change to false for turkle
-  const [isPreview, setIsPreview] = useState(true);
+  const [isPreview, setIsPreview] = useState(false);
 
   useEffect(() => {
     // console.log("is_preview", is_preview);

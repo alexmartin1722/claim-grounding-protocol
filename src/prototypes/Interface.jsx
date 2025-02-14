@@ -1,20 +1,11 @@
 import './Interface.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import AbstractViewer from './AbstractViewer';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { AppBar, Divider, Toolbar } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { lightPalette, darkPalette } from '../components/themes';
-import { useMediaQuery } from '@mui/material';
-import { parseCsvFromPublic, loadClaimsFromString } from '../components/utils';
 import VideoViewer from './VideoViewer';
-import ClaimGrounder from './ClaimGrounder';
 import SentenceViewer from './SentenceViewer';
 import { NormalCard } from '../components/Cards';
 
@@ -106,6 +97,19 @@ function Interface(props) {
             newOCRChecked[index] = false;
             setOCRChecked(newOCRChecked);
         }
+    }
+
+    const atLeastOneChecked = (index) => {
+        return audioChecked[index] || videoChecked[index] || ocrChecked[index] || neitherChecked[index];
+    }
+
+    const allClaimsOneChecked = () => {
+        for (let i = 0; i < claims.length; i++) {
+            if (!atLeastOneChecked(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -213,10 +217,20 @@ function Interface(props) {
 
                 
                 
-                <Button type="submit" variant="contained" color="primary" sx={{
+                {/* <Button type="submit" variant="contained" color="primary" sx={{
                     width: "100%",
                     borderRadius: "10px",
                 }}>
+                    <Typography variant="h5" sx={{
+                    }}>
+                        Submit
+                    </Typography>
+                </Button> */}
+                {/* before allowing submission, make sure at least one option is selected for each claim */}
+                <Button type="submit" variant="contained" color="primary" sx={{
+                    width: "100%",
+                    borderRadius: "10px",
+                }} disabled={!allClaimsOneChecked()}>
                     <Typography variant="h5" sx={{
                     }}>
                         Submit

@@ -1,9 +1,5 @@
-import { Button, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
-import TextBlock from "./TextBlock";
+import { Typography } from "@mui/material";
 import { NormalCard } from "../components/Cards";
-import { Height } from "@mui/icons-material";
-import { loadClaimsFromString } from '../components/utils';
 
 function SentenceViewer(props) {
     const {
