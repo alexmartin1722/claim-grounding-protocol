@@ -43,6 +43,7 @@ const parseCsvFromPublic = async (fileName) => {
 
 function loadJsonPayload(json_string) {
   try {
+    console.log("json_string", json_string);
     return JSON.parse(json_string);
   } catch (e) {
     // console.log("json_string", json_string);

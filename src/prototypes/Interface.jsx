@@ -8,13 +8,14 @@ import Typography from '@mui/material/Typography';
 import VideoViewer from './VideoViewer';
 import SentenceViewer from './SentenceViewer';
 import { NormalCard } from '../components/Cards';
-
-
+import SentenceClaimVeiwer from './SentenceClaimViewer';
+import { animated, useSpring } from '@react-spring/web';
+import { Cancel, Height } from '@mui/icons-material';
+import TextField from '@mui/material/TextField';
+import TextBlock from './TextBlock';
 
 
 function Interface(props) {
-
-
     const {
         theme,
         payload,
@@ -26,155 +27,126 @@ function Interface(props) {
     const [backgroundColors, setBackgroundColors] = useState([]);
     const [selections, setSelections] = useState([]);
     const [numAlreadyAdded, setNumAlreadyAdded] = useState(0);
+    // define a variable for the written article
+    const [article, setArticle] = useState("");
 
-    // let claims = loadClaimsFromString(payload.Extracted_Claims);
-    let claims = payload.Extracted_Claims;
+    // define function for updating the article as people type
+    const handleArticleChange = (event) => {
+        setArticle(event.target.value);
+    }
 
-    const [audioChecked, setAudioChecked] = useState(new Array(claims.length).fill(false));
-    const [videoChecked, setVideoChecked] = useState(new Array(claims.length).fill(false));
-    const [ocrChecked, setOCRChecked] = useState(new Array(claims.length).fill(false));
-    const [neitherChecked, setNeitherChecked] = useState(new Array(claims.length).fill(false));
+    const [spring, api] = useSpring(() => ({
+
+        transform: "scale(1)",
+        boxShadow: "0px 0px 5px rgba(0,0,0,0.1)",
+        opacity: 1,
+        config: {
+            mass: 1,
+            tension: 170,
+            friction: 26,
+        }
+    }));
+
+    const [crossSpring, crossApi] = useSpring(() => ({
+        transform: "scale(1)",
+        boxShadow: "0px 0px 5px rgba(0,0,0,0.1)",
+        opacity: 0.5,
+        config: {
+            mass: 1,
+            tension: 170,
+            friction: 26,
+        }
+    }));
+
+    // define mouse events for clicking on the text box
+    const handleMouseEnter = () => {
+        api.start({
+            transform: "scale(1.05)",
+            boxShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+        });
+    }
+
+    const handleMouseLeave = () => {
+        api.start({
+            transform: "scale(1)",
+            boxShadow: "0px 0px 5px rgba(0,0,0,0.1)",
+        });
+    }
+
+    const handleCrossMouseEnter = () => {
+        crossApi.start({
+            opacity: 1,
+        });
+    }
+
+    const handleCrossMouseLeave = () => {
+        crossApi.start({
+            opacity: 0.5,
+        });
+    }
+
+    const handleCrossClick = () => {
+        api.start({
+            from: {
+                transform: "scale(1)",
+                boxShadow: "0px 0px 5px rgba(0,0,0,0.1)",
+                opacity: 1,
+            },
+            to: async (next) => {
+                await next({
+                    transform: "scale(0)",
+                    boxShadow: "0px 0px 5px rgba(0,0,0,0.1)",
+                    opacity: 0,
+                });
+                setArticle("");
+            }
+        });
+    }
+
 
     
-
-    // const handleAudioChange = (event) => {
-    //     setAudioChecked(event.target.checked);
-    //     if (event.target.checked) {
-    //         setNeitherChecked(false);
-    //     }
-    // }
-    const handleAudioChange = (index) => {
-        let newAudioChecked = [...audioChecked];
-        newAudioChecked[index] = !newAudioChecked[index];
-        setAudioChecked(newAudioChecked);
-        if (newAudioChecked[index]) {
-            let newNeitherChecked = [...neitherChecked];
-            newNeitherChecked[index] = false;
-            setNeitherChecked(newNeitherChecked);
-        }
-    }
-
-    // const handleVideoChange = (event) => {
-    //     setVideoChecked(event.target.checked);
-    //     if (event.target.checked) {
-    //         setNeitherChecked(false);
-    //     }
-    // }
-    const handleVideoChange = (index) => {
-        let newVideoChecked = [...videoChecked];
-        newVideoChecked[index] = !newVideoChecked[index];
-        setVideoChecked(newVideoChecked);
-        if (newVideoChecked[index]) {
-            let newNeitherChecked = [...neitherChecked];
-            newNeitherChecked[index] = false;
-            setNeitherChecked(newNeitherChecked);
-        }
-    }
-    const handleOCRChange = (index) => {
-        let newOCRChecked = [...ocrChecked];
-        newOCRChecked[index] = !newOCRChecked[index];
-        setOCRChecked(newOCRChecked);
-        if (newOCRChecked[index]) {
-            let newNeitherChecked = [...neitherChecked];
-            newNeitherChecked[index] = false;
-            setNeitherChecked(newNeitherChecked);
-        }
-    }
-
-
-    const handleNeitherChange = (index) => {
-        let newNeitherChecked = [...neitherChecked];
-        newNeitherChecked[index] = !newNeitherChecked[index];
-        setNeitherChecked(newNeitherChecked);
-        if (newNeitherChecked[index]) {
-            let newAudioChecked = [...audioChecked];
-            newAudioChecked[index] = false;
-            setAudioChecked(newAudioChecked);
-            let newVideoChecked = [...videoChecked];
-            newVideoChecked[index] = false;
-            setVideoChecked(newVideoChecked);
-            let newOCRChecked = [...ocrChecked];
-            newOCRChecked[index] = false;
-            setOCRChecked(newOCRChecked);
-        }
-    }
-
-    const atLeastOneChecked = (index) => {
-        return audioChecked[index] || videoChecked[index] || ocrChecked[index] || neitherChecked[index];
-    }
-
-    const allClaimsOneChecked = () => {
-        for (let i = 0; i < claims.length; i++) {
-            if (!atLeastOneChecked(i)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    useEffect(() => {
-    }, [payload]);
 
 
     return (
         <Box>
             <Box sx={{
-                padding: "30px",
+                padding: "10px",
                 width: "100%",
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <VideoViewer payload={payload} />
+                        {/* <VideoViewer payload={payload} /> */}
+                        <SentenceClaimVeiwer payload={payload} />
                     </Grid>
                     <Grid item xs={6}>
+                        {/* instert a large text editable  box to write the report in*/}
                         <Box sx={{
-                            padding: "0px",
-                        }}>
-                            <SentenceViewer payload={payload} />
-                        </Box>
-                        <Box sx={{
-                            padding: "0px",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            flexWrap: "wrap",
+                            height: "95vh",
                             overflow: "auto",
-                            height: "55vh",
+                            width: "100%",
                         }}>
-                            <NormalCard>
-                            {claims.map((claim, index) => {
-                                return <Box sx={{
-                                    // padding: "10px",
-                                    // 0 right padding 10 bottom padding 0 left padding
-                                    padding: "10px 0px 10px 0px",
-                                }}>
-                                    <Typography variant="p1">
-                                        <b>Claim {index+1}: </b>
-                                        {claim}
-                                    </Typography>
-                                    <br />
-                                        <label>
-                                            Audio
-                                            <input type="checkbox" checked={audioChecked[index]} onChange={() => handleAudioChange(index)} />
-                                            ;
-                                        </label>
-                                        <label>
-                                            Video
-                                            <input type="checkbox" checked={videoChecked[index]} onChange={() => handleVideoChange(index)} />
-                                            ;
-                                        </label>
-                                        <label>
-                                            OCR
-                                            <input type="checkbox" checked={ocrChecked[index]} onChange={() => handleOCRChange(index)} />
-                                            ;
-                                        </label>
-                                        <label>
-                                            Neither
-                                            <input type="checkbox" checked={neitherChecked[index]} onChange={() => handleNeitherChange(index)} />
-                                            ;
-                                        </label>
-
-                                </Box>
-                        })}
-                            </NormalCard>
+                            <animated.div
+                                // onMouseEnter={handleMouseEnter}
+                                // onMouseLeave={handleMouseLeave}
+                                // style={spring}
+                                // className="article-box"
+                            >
+                                <TextField
+                                    id="article"
+                                    label="Article"
+                                    variant="filled"
+                                    multiline
+                                    rows={20}
+                                    value={article}
+                                    onChange={handleArticleChange}
+                                />
+                            </animated.div>
                         </Box>
+
                     </Grid>
                 </Grid>
                 {/* <Box sx={{
@@ -230,7 +202,7 @@ function Interface(props) {
                 <Button type="submit" variant="contained" color="primary" sx={{
                     width: "100%",
                     borderRadius: "10px",
-                }} disabled={!allClaimsOneChecked()}>
+                }}>
                     <Typography variant="h5" sx={{
                     }}>
                         Submit
@@ -247,10 +219,12 @@ function Interface(props) {
             /> */}
             {/* <input type="hidden" id="descriptions" name="descriptions" value={JSON.stringify(weaknessDescs)} />
             <input type="hidden" id="selections" name="selections" value={JSON.stringify(selections)} /> */}
-            <input type="hidden" id="audio" name="audio" value={JSON.stringify(audioChecked)} />
+            {/* <input type="hidden" id="audio" name="audio" value={JSON.stringify(audioChecked)} />
             <input type="hidden" id="video" name="video" value={JSON.stringify(videoChecked)} />
             <input type="hidden" id="ocr" name="ocr" value={JSON.stringify(ocrChecked)} />
-            <input type="hidden" id="neither" name="neither" value={JSON.stringify(neitherChecked)} />
+            <input type="hidden" id="neither" name="neither" value={JSON.stringify(neitherChecked)} /> */}
+            {/* <input type="hidden" id="article" name="article" value={JSON.stringify(article)} /> */}
+            <input type="hidden" id="article" name="article" value={article} />
         </Box>
     );
 }

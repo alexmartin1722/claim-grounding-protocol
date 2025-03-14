@@ -6,14 +6,20 @@ import { viteSingleFile } from 'vite-plugin-singlefile'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // build: {
+  //   rollupOptions: {
+  //     treeshake: true,
+  //   }
+  // },
   plugins: [
-    react({
+    react(
+      {
       babel: {
         plugins: [
           [
             '@babel/plugin-transform-template-literals',
             {"extensions": [".js", ".jsx", ".ts", ".tsx", ".es6", ".es", ".mjs"]}
-          ]
+          ],
         ],
       }
     }),

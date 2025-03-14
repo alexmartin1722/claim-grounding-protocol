@@ -164,20 +164,22 @@ function CustomTabPanel(props) {
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  // const theme = prefersDarkMode ? darkTheme : lightTheme;
-  const theme = lightTheme;
+  const theme = prefersDarkMode ? darkTheme : lightTheme;
+  // const theme = lightTheme;
   // uncomment this for debugging
   const [payloads, setPayloads] = useState([]);
   const [payload_index, setPayloadIndex] = useState(0);
   // Change to false for turkle
-  const [isPreview, setIsPreview] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
 
   useEffect(() => {
-    // console.log("is_preview", is_preview);
+    console.log("is_preview", isPreview);
     if (isPreview) {
       const fetchPayload = async () => {
         try {
-          const response = await parseCsvFromPublic("en_batch.csv");
+          console.log("fetching payload");
+          const response = await parseCsvFromPublic("en_batch_pilot_rewrite_batches.csv");
+          console.log("response", response);
           setPayloads(response);
         }
         catch (error) {
